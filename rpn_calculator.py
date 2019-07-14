@@ -5,7 +5,10 @@ from json_interaction import load_prev_ans, save_ans, clear_ans
 # Converts an input string into a list of strings by seperating at the spaces and tries to literally evaluate each string.
 def parse_user_input(user_input):
     list_input_char = user_input.split(" ")
-    previous_ans = load_prev_ans()
+
+    for char in list_input_char:
+        if not char.strip():
+            list_input_char.remove(char)
 
     # Replaces all numeric strings with floats / ints, fractions if possible, and "ans" with the stored ans
     for index, value in enumerate(list_input_char):
@@ -13,26 +16,27 @@ def parse_user_input(user_input):
             pass
 
         elif value == "ans":
-            list_input_char[index] = previous_ans
+            list_input_char[index] = load_prev_ans()
 
         elif value == "clear":
             clear_ans()
-            del list_input_char[index]
 
         else:
             list_input_char[index] = Fraction(value)
-    
+
+    list_input_char = [x for x in list_input_char if x != "clear"]
+
     return list_input_char
 
 # Takes an input of 3 characters and tries to solve it. Returns the answer if it suceedes and returns None it if doesn't.
 def solve_three_chars(char1, char2, char3):
     ops = {'+' : operator.add, '-' : operator.sub, '*' : operator.mul, '/' : operator.truediv, '%' : operator.mod, '**' : operator.pow}
-
-    if (type(char1) is int or float) and (type(char2) is int or float) and (char3 == "//"):
-        char2 = Fraction(1 / char2)
-        char3 = "**"
-
+    
     if (type(char1) is int or float) and (type(char2) is int or float) and (char3 in ops):
+        if char3 == "//":
+            char2 = Fraction(1 / char2)
+            char3 = "**"
+        
         output = ops[char3](char1, char2)
         return output
 
@@ -59,15 +63,15 @@ def solve_equation(list_char_eval):
     return(list_char_eval[0])
 
 while True:
-    user_input = input("Input your equation in reverse polish notation: ")
+    user_input = input("\n")
 
-    if user_input == "n":
+    if user_input == "exit":
         break
     
     parsed_input = parse_user_input(user_input)
     
     if len(parsed_input) == 0:
         pass
-
+        
     else:
-        print(str(solve_equation(parsed_input)) + "\n")
+        print(str(solve_equation(parsed_input)))
