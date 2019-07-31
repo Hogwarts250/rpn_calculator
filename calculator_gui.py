@@ -20,26 +20,31 @@ def calculate(*args):
 root = Tk()
 root.title("Reverse Polish Notation Calculator")
 
-# Creates the parent mainframe (grid) that the widgets will be children of.
-mainframe = ttk.Frame(root, padding = "3 3 12 12")
-mainframe.grid(column = 0, row = 0, sticky = (N, W, E, S))
-root.columnconfigure(0, weight = 1)
-root.rowconfigure(0, weight = 1)
-
 equation = StringVar()
 answer = StringVar()
 
+# Creates the parent mainframe (grid) that the widgets will be children of.
+mainframe = ttk.Frame(root, padding = (3, 3, 12, 12))
+mainframe.grid(column = 0, row = 0, sticky = (N, W, E, S))
+
 # Creates an input box for the user to type in their equation.
 equation_entry = ttk.Entry(mainframe, width = 20, textvariable = equation)
-equation_entry.grid(column = 2, row = 1, sticky = (W, E))
+equation_entry.grid(column = 1, row = 0, sticky = (N, W, E, S))
 
-ttk.Button(mainframe, text = "Enter", command = calculate).grid(column = 2, row = 2, sticky = E)
+ttk.Button(mainframe, text = "Enter", command = calculate).grid(column = 1, row = 1, sticky = (N, E, S))
 # Automaically updating label displaying the answer
-ttk.Label(mainframe, textvariable = answer).grid(column = 2, row = 3, sticky = (W, E))
+ttk.Label(mainframe, textvariable = answer).grid(column = 1, row = 2, sticky = (N, E, S))
 
-ttk.Label(mainframe, text="step 1: input equation").grid(column = 1, row = 1, sticky = W)
-ttk.Label(mainframe, text="step 2: ???").grid(column = 1, row = 2, sticky = W)
-ttk.Label(mainframe, text="step 3: answer").grid(column = 1, row = 3, sticky = W)
+ttk.Label(mainframe, text="step 1: input equation").grid(column = 0, row = 0, sticky = (N, W, E, S))
+ttk.Label(mainframe, text="step 2: ???").grid(column = 0, row = 1, sticky = (N, W, S))
+ttk.Label(mainframe, text="step 3: answer").grid(column = 0, row = 2, sticky = (N, W, S))
+
+root.columnconfigure(0, weight = 1)
+root.rowconfigure(0, weight = 1)
+mainframe.columnconfigure(1, weight = 1)
+mainframe.rowconfigure(0, weight = 1)
+mainframe.rowconfigure(1, weight = 1)
+mainframe.rowconfigure(2, weight = 1)
 
 # Automatically adds padding to all the children of the mainframe
 for child in mainframe.winfo_children():
