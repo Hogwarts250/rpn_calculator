@@ -7,22 +7,22 @@ def parse_user_input(user_input):
     list_input_char = user_input.split(" ")
     output_list = []
 
-    inverse_trig_relations = {"sin-1" : "asin", "cos-1" : "acos", "tan-1" : "atan"}
+    inverse_trig_funcs = ["sin-1", "cos-1", "tan-1"]
 
     # Checks if a value is empty and removes it if it is.
     for char in list_input_char:
         if not char.strip():
             list_input_char.remove(char)
 
-    # Replaces all numeric strings with fractions, "ans" with the stored ans, and modifies trig functions to avoid errors.
+    # Replaces all numeric strings with fractions, "ans" with the stored ans, and modifies trig functions.
     for value in list_input_char:
         if value in ["+", "-", "*", "/", "%", "**", "//"]:
             output_list.append(value)
 
         elif value in ["sin", "cos", "tan", "sin-1", "cos-1", "tan-1"]:
-        # Puts a placeholder 1 in front of trig functions in order to avoid conflictions with solve_three_chars.
-            if value in inverse_trig_relations:
-                output_list.extend([-1, inverse_trig_relations[value]])
+        # Puts a placeholder 1 in front of trig functions in order to avoid problems with solve_three_chars.
+            if value in inverse_trig_funcs:
+                output_list.extend([-1, value])
             
             else:
                 output_list[-1] = math.radians(output_list[-1])
@@ -39,11 +39,14 @@ def parse_user_input(user_input):
 
     return output_list
 
-# Takes an input of 3 characters and attempts to solve it. Returns the answer if it suceedes and None it if doesn't.
+# Takes an input of 3 characters and attempts to solve it.
 def solve_three_chars(char1, char2, char3):
-    ops = {"+" : operator.add, "-" : operator.sub, "*" : operator.mul, "/" : operator.truediv, "%" : operator.mod, "**" : operator.pow, "//": None} 
-    special_ops = {"sin" : math.sin, "cos" : math.cos, "tan" : math.tan, "asin" : math.asin, "acos" : math.acos, "atan" : math.atan}
-    
+    ops = {"+" : operator.add, "-" : operator.sub, "*" : operator.mul, "/" : operator.truediv, 
+        "%" : operator.mod, "**" : operator.pow, "//": None} 
+    special_ops = {"sin" : math.sin, "cos" : math.cos, "tan" : math.tan, "sin-1" : math.asin, 
+        "cos-1" : math.acos, "tan-1" : math.atan}
+    inverse_trig_funcs = ["sin-1", "cos-1", "tan-1"]
+
     if (type(char1) is int or float) and (type(char2) is int or float):
         # Handles basic mathematical equations.
         if char3 in ops:
@@ -58,7 +61,7 @@ def solve_three_chars(char1, char2, char3):
         elif char3 in special_ops:
             output = special_ops[char3](char1)
             
-            if char3 in ["asin", "acos", "atan"]:
+            if char3 in inverse_trig_funcs:
                 return math.degrees(output)
                 
             else:
@@ -86,7 +89,7 @@ def solve_equation(list_char_eval):
 
     return(list_char_eval[0])
 
-"""
+
 while True:
     user_input = input("\n")
 
@@ -100,4 +103,3 @@ while True:
         
     else:
         print(str(solve_equation(parsed_input)))
-"""
