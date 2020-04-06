@@ -73,7 +73,9 @@ def solve_three_chars(char1, char2, char3):
 def solve_equation(list_char_eval):
     for index in range(len(list_char_eval)):
         if len(list_char_eval) == 1:
-            break
+            # Automatically saves answer in .json file.
+            save_ans(str(list_char_eval[0]))
+            return(list_char_eval[0])
 
         solve_output = solve_three_chars(list_char_eval[index], list_char_eval[index + 1], list_char_eval[index + 2])
         
@@ -84,12 +86,7 @@ def solve_equation(list_char_eval):
 
             solve_equation(list_char_eval)
     
-    # Automatically saves answer in .json file.
-    save_ans(str(list_char_eval[0]))
-
-    return(list_char_eval[0])
-
-
+"""
 while True:
     user_input = input("\n")
 
@@ -103,3 +100,4 @@ while True:
         
     else:
         print(str(solve_equation(parsed_input)))
+"""
